@@ -1,76 +1,67 @@
-# Caça-Alucinações — Desafio BRACIS 2026
+# Desafio Caça-Alucinações (BRACIS 2026 / Jusbrasil)
 
-Pipeline modular de extração, normalização e resolução canônica de citações jurídicas para detecção de alucinações em peças processuais.
+Pipeline determinístico para extração, normalização e resolução canônica de citações jurídicas em documentos processuais.
 
-## Arquitetura em Camadas (FastAPI Style)
+## Estrutura do Projeto
 
-O projeto adota separação estrita de responsabilidades em camadas desacopladas:
+- `src/core/`: Configurações centralizadas e tratamento de exceções.
+- `src/schemas/`: Modelos Pydantic para validação dos dados de entrada e saída.
+- `src/repositories/`: Camada de acesso à base SQLite (`desafio1_bracis.db`) e aos arquivos de texto.
+- `src/services/`: Serviços de extração de spans, normalização de ruídos OCR, resolução canônica e avaliação de métricas.
+- `src/cli/`: Entry points para execução em lote e benchmark local.
+- `scripts/`: Conversores para geração do `submission.csv` e empacotamento do `submission.zip`.
+- `tests/`: Suíte de testes unitários e de integração.
 
-- `src/core/`: Configurações centralizadas via variáveis de ambiente e exceções de domínio.
-- `src/schemas/`: Modelos Pydantic para validação de entrada, saída, citações e métricas de avaliação.
-- `src/repositories/`: Camada de acesso a dados (SQLite `desafio1_bracis.db`, `.txt` e `goldenset.xlsx`).
-- `src/services/`: Serviços de negócio puros:
-  - `ExtractionService`: Extração de spans candidatos e filtro de distratores de cabeçalho.
-  - `NormalizationService`: Tratamento de ruídos OCR, abreviações e formatação canônica de identificadores.
-  - `NormativeMatcher`: Mapeamento determinístico dos 18 registros normativos (súmulas e leis).
-  - `ResolutionService`: Resolução determinística contra o banco e atribuição de classes (`real`, `inventada`, `incompleta`).
-  - `PipelineService`: Orquestrador ponta a ponta por documento.
-  - `EvaluationService`: Avaliador local de métricas (IoU $\ge$ 0.5, acurácia de classificação e resolução).
-- `src/cli/`: Entry points de linha de comando para processamento em lote e benchmarking.
-- `scripts/`: Conversores e empacotadores de submissão (`json_to_submission.py` e `package_submission.py`).
-- `tests/`: Suíte automatizada de testes unitários.
-
-## Regras Estruturais do Código
-
-- Código 100% livre de comentários internos.
-- Arquivos com limite estrito de no máximo 200 linhas (o maior arquivo possui 132 linhas).
-- Cada diretório possui seu próprio arquivo `docs.md` detalhando responsabilidade e fluxo de dados.
-- Sem dependências de APIs proprietárias ou conexão de rede em runtime.
-
-## Instruções de Execução
-
-### 1. Configuração do Ambiente
+## Instalação e Configuração
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-make install
+pip install -r requirements.txt
 cp .env.example .env
 ```
 
-### 2. Executar a Suíte de Testes
+## Execução
+
+### 1. Processamento em Lote
+
+Gera um arquivo JSON por documento no diretório de saída:
 
 ```bash
-make test
+python src/cli/run_pipeline.py --input /caminho/para/txt --output ./output
 ```
 
-### 3. Processar Documentos em Lote
-
-Gera um arquivo JSON por documento na pasta `./output`:
+Ou usando o Makefile:
 
 ```bash
 make run
 ```
 
-### 4. Executar o Benchmark Local contra o Gabarito
+### 2. Benchmark Local
 
-Calcula precisão, recall, F1 e acurácia de classificação/resolução:
+Calcula as métricas de IoU, precisão, recall, F1 e acurácia de resolução contra o gabarito oficial:
 
 ```bash
 make benchmark
 ```
 
-### 5. Gerar Pacote de Submissão
+### 3. Gerar Submissão
 
-Gera `submission.csv` e `submission.zip` prontos para upload no leaderboard:
+Gera o arquivo `submission.csv` e empacota o `submission.zip` para o leaderboard:
 
 ```bash
 make submission
 ```
 
-### 6. Execução via Docker (Contrato Oficial)
+### 4. Execução via Docker
 
 ```bash
 make docker-build
 docker run --rm -v /caminho/para/in:/data/in -v /caminho/para/out:/data/out caca-alucinacoes-bracis --input /data/in --output /data/out
+```
+
+### 5. Testes
+
+```bash
+make test
 ```
