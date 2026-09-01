@@ -23,4 +23,6 @@ class DistractorFilter:
             return True
         if re.search(r"\bprotocolo\b", lower):
             return True
+        if "interposto pela parte" in lower or "interposto contra sentença" in lower:
+            return True
         return False

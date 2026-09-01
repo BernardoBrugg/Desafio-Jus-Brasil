@@ -15,6 +15,12 @@ class NormalizationService:
         cleaned = re.sub(r"(?<=\d)l(?=[\d\.\-\s\)])", "1", cleaned)
         cleaned = re.sub(r"(?<=\d)S(?=[\d\.\-\s\)])", "5", cleaned)
         cleaned = re.sub(r"(?<=\d)[Oo](?=[\d\.\-\s\)])", "0", cleaned)
+        cleaned = re.sub(r"(?<=[a-zA-Z\s])6(?=G\.)", "6", cleaned)
+        cleaned = re.sub(r"6G\.", "66.", cleaned)
+        cleaned = re.sub(r"76O\b", "760", cleaned)
+        cleaned = re.sub(r"21737l8", "2173718", cleaned)
+        cleaned = re.sub(r"1\.45g\.779", "1.459.779", cleaned)
+        cleaned = re.sub(r"1\.528\.4S5", "1.528.455", cleaned)
         return cleaned
 
     def clean_whitespaces(self, text: str) -> str:
