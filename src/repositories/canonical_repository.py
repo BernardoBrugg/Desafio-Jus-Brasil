@@ -68,7 +68,7 @@ class CanonicalRepository:
             num_matches = re.findall(r"\b(?:\d{1,3}(?:[\.\s\xa0]\d{3})+|\d{4,8})\b", intro)
             for m in num_matches:
                 d = extract_digits(m)
-                if len(d) >= 4 and not (1990 <= int(d) <= 2030):
+                if len(d) >= 4 and int(d) != 0 and not (1900 <= int(d) <= 2035):
                     existing = self.number_to_records.setdefault(d, [])
                     if not any(r.id == rec.id for r in existing):
                         existing.append(rec)
