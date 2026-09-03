@@ -29,7 +29,7 @@ class ResolutionService:
         if any(g in lower for g in ["normas", "regência", "dispositivo constitucional", "dispositivo legal", "legislação", "prescrição", "artigo correspondente", "preceito normativo"]):
             return CitationPrediction(
                 inicio=span.inicio, fim=span.fim, trecho=span.trecho,
-                tipo=span.tipo, classificacao=CitationClass.INCOMPLETA, resolucao=None
+                tipo=span.tipo, classificacao=CitationClass.INCOMPLETA, resolucao=None, confianca=1.0
             )
 
         match_id = self.normative_matcher.match_dispositivo(text)
@@ -37,11 +37,11 @@ class ResolutionService:
             return CitationPrediction(
                 inicio=span.inicio, fim=span.fim, trecho=span.trecho,
                 tipo=span.tipo, classificacao=CitationClass.REAL,
-                resolucao=Resolution(id_canonico=match_id)
+                resolucao=Resolution(id_canonico=match_id), confianca=1.0
             )
         return CitationPrediction(
             inicio=span.inicio, fim=span.fim, trecho=span.trecho,
-            tipo=span.tipo, classificacao=CitationClass.INVENTADA, resolucao=None
+            tipo=span.tipo, classificacao=CitationClass.INVENTADA, resolucao=None, confianca=1.0
         )
 
     def _resolve_jurisprudencia(self, span: ExtractedSpan, text: str) -> CitationPrediction:
@@ -52,7 +52,7 @@ class ResolutionService:
             if not non_years and not re.search(r"\d{4}\.\d", text):
                 return CitationPrediction(
                     inicio=span.inicio, fim=span.fim, trecho=span.trecho,
-                    tipo=span.tipo, classificacao=CitationClass.INCOMPLETA, resolucao=None
+                    tipo=span.tipo, classificacao=CitationClass.INCOMPLETA, resolucao=None, confianca=1.0
                 )
 
         if "súmula" in lower or "sumula" in lower or "súm." in lower:
@@ -61,11 +61,11 @@ class ResolutionService:
                 return CitationPrediction(
                     inicio=span.inicio, fim=span.fim, trecho=span.trecho,
                     tipo=span.tipo, classificacao=CitationClass.REAL,
-                    resolucao=Resolution(id_canonico=sumula_id)
+                    resolucao=Resolution(id_canonico=sumula_id), confianca=1.0
                 )
             return CitationPrediction(
                 inicio=span.inicio, fim=span.fim, trecho=span.trecho,
-                tipo=span.tipo, classificacao=CitationClass.INVENTADA, resolucao=None
+                tipo=span.tipo, classificacao=CitationClass.INVENTADA, resolucao=None, confianca=1.0
             )
 
         cnj_digits = self.normalization_service.extract_digits(text)
@@ -75,11 +75,11 @@ class ResolutionService:
                 return CitationPrediction(
                     inicio=span.inicio, fim=span.fim, trecho=span.trecho,
                     tipo=span.tipo, classificacao=CitationClass.REAL,
-                    resolucao=Resolution(id_canonico=cnj_id)
+                    resolucao=Resolution(id_canonico=cnj_id), confianca=1.0
                 )
             return CitationPrediction(
                 inicio=span.inicio, fim=span.fim, trecho=span.trecho,
-                tipo=span.tipo, classificacao=CitationClass.INVENTADA, resolucao=None
+                tipo=span.tipo, classificacao=CitationClass.INVENTADA, resolucao=None, confianca=1.0
             )
 
         tribunal_hint = None
@@ -113,12 +113,12 @@ class ResolutionService:
                 return CitationPrediction(
                     inicio=span.inicio, fim=span.fim, trecho=span.trecho,
                     tipo=span.tipo, classificacao=CitationClass.REAL,
-                    resolucao=Resolution(id_canonico=matched_ids[0])
+                    resolucao=Resolution(id_canonico=matched_ids[0]), confianca=1.0
                 )
             elif len(matched_ids) > 1:
                 return CitationPrediction(
                     inicio=span.inicio, fim=span.fim, trecho=span.trecho,
-                    tipo=span.tipo, classificacao=CitationClass.INCOMPLETA, resolucao=None
+                    tipo=span.tipo, classificacao=CitationClass.INCOMPLETA, resolucao=None, confianca=1.0
                 )
 
         digits = self.normalization_service.extract_digits(text)
@@ -128,19 +128,19 @@ class ResolutionService:
                 return CitationPrediction(
                     inicio=span.inicio, fim=span.fim, trecho=span.trecho,
                     tipo=span.tipo, classificacao=CitationClass.REAL,
-                    resolucao=Resolution(id_canonico=matched_ids[0])
+                    resolucao=Resolution(id_canonico=matched_ids[0]), confianca=1.0
                 )
             elif len(matched_ids) > 1:
                 return CitationPrediction(
                     inicio=span.inicio, fim=span.fim, trecho=span.trecho,
-                    tipo=span.tipo, classificacao=CitationClass.INCOMPLETA, resolucao=None
+                    tipo=span.tipo, classificacao=CitationClass.INCOMPLETA, resolucao=None, confianca=1.0
                 )
             return CitationPrediction(
                 inicio=span.inicio, fim=span.fim, trecho=span.trecho,
-                tipo=span.tipo, classificacao=CitationClass.INVENTADA, resolucao=None
+                tipo=span.tipo, classificacao=CitationClass.INVENTADA, resolucao=None, confianca=1.0
             )
 
         return CitationPrediction(
             inicio=span.inicio, fim=span.fim, trecho=span.trecho,
-            tipo=span.tipo, classificacao=CitationClass.INCOMPLETA, resolucao=None
+            tipo=span.tipo, classificacao=CitationClass.INCOMPLETA, resolucao=None, confianca=1.0
         )

@@ -30,6 +30,7 @@ MANIFEST
 .env.local
 
 output/
+dados/
 submission.csv
 submission.zip
 matches/
