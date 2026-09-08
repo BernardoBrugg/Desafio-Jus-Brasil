@@ -5,6 +5,20 @@ from src.repositories.canonical_repository import CanonicalRepository
 from src.repositories.document_repository import DocumentRepository
 from src.services.pipeline_service import PipelineService
 
+def resolve_db_path(candidate_path: Path) -> Path:
+    if candidate_path.exists():
+        return candidate_path
+    common_locations = [
+        Path("/data/desafio1_bracis.db"),
+        Path("/data/db/desafio1_bracis.db"),
+        Path("./dados/desafio1_bracis.db"),
+        Path("./desafio1_bracis.db"),
+    ]
+    for loc in common_locations:
+        if loc.exists():
+            return loc
+    return candidate_path
+
 def run():
     settings = get_settings()
     parser = argparse.ArgumentParser()
@@ -15,7 +29,7 @@ def run():
 
     input_dir = Path(args.input)
     output_dir = Path(args.output)
-    db_path = Path(args.db_path)
+    db_path = resolve_db_path(Path(args.db_path))
 
     canonical_repo = CanonicalRepository(db_path=db_path)
     doc_repo = DocumentRepository(input_dir=input_dir)
