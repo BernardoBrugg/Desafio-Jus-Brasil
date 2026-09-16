@@ -82,12 +82,6 @@ class CanonicalRepository:
             return self.primary_cnj_to_id[key]
         recs = self.cnj_to_records.get(key, [])
         if recs:
-            if len(recs) == 1:
-                return recs[0].id
-            if "agarr" in full_citation.lower():
-                for r in recs:
-                    if "agarr" in r.texto[:400].lower() or "agravo da reclamante" in r.texto[:400].lower() or "recurso de revista com agravo" in r.texto[:400].lower():
-                        return r.id
             return recs[0].id
         return self.body_cnj_to_id.get(key)
 

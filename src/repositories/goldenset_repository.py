@@ -22,7 +22,7 @@ class GoldenSetRepository:
 
     def _load_from_csv(self) -> List[GoldenItem]:
         items = []
-        with open(self.file_path, "r", encoding="utf-8") as f:
+        with open(self.file_path, "r", encoding="utf-8-sig") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 raw_id = row.get("id_canonico", "").strip()

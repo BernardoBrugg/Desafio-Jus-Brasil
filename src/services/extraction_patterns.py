@@ -9,7 +9,7 @@ PROCESS_WRAPPER = r"(?:(?:Processo|Autos)[\s\xa0\n]+(?:n[º°\.]*|no|n\.|n)?[\s\
 COURT_PREFIX = r"(?:(?:TST|STF|STJ|STM|TSE)[\s\xa0\n\-_]+)?"
 CHAINED_APPEAL_PREFIX = r"(?:(?:(?:ED(?:cl|s)?|AgR(?:-AI|-REspe)?|AgRg|AgInt|Ag(?:ravo)?(?:\s+em|\s+de|\s+no|\s+na|\s+nos|\s+nas|\s+Interno|\s+Regimental|\s+de\s+Instrumento|\.?(?:\s*Reg|\s*Int)\.?)?|EAREsp|EREsp|E-ED|ED-E-ED)[\s\xa0\n\-_]+(?:em|no|na|nos|nas|n[º°\.]*)?[\s\xa0\n\-_]*)*)"
 MAIN_APPEAL_TYPE = (
-    r"(?:AgR-REspe|REspe\.?|AREspEI|R-Rp|AgR-AI|ARR|AgARR|AIRR|AgRg|AgInt|Ag\.?\s*Int\.?|AG\.?REG|Ag\.?\s*Reg\.?|"
+    r"(?:AgR-REspe|REspe\.?|AREsp(?:E[lI]|e)?|R-Rp|AgR-AI|ARR|AgARR|AIRR|AgRg|AgInt|Ag\.?\s*Int\.?|AG\.?REG|Ag\.?\s*Reg\.?|"
     r"Agravo(?:\s+em|\s+de|\s+no|\s+na|\s+nos|\s+nas|\s+Interno|\s+Regimental|\s+de\s+Instrumento|\.?(?:\s*Reg|\s*Int)\.?)?|"
     r"REsp|AREsp|A\.?\s*REsp|AgREsp|RHC|HC|H\.C\.|MS|RMS|ADI|ADC|ADPF|RE\.?|AI|RSE|RO|RR|RRAg|AIRR|EDcl|EDs|ED|Apelação|APL|"
     r"Reclamação|Rcl|Recl\.|RCL|R\.?Esp\.?|Rec\.\s*Esp\.?|"
@@ -71,8 +71,7 @@ LEI_PATTERNS: List[Tuple[re.Pattern, CitationType]] = [
             r"Estatuto[\s\xa0\n]+(?:da[\s\xa0\n]+Criança[\s\xa0\n]+e[\s\xa0\n]+do[\s\xa0\n]+Adolescente|da[\s\xa0\n]+OAB|da[\s\xa0\n]+Cidade|do[\s\xa0\n]+Idoso)|"
             r"Constituição[\s\xa0\n]+(?:Federal|da[\s\xa0\n]+República|Fedcral)|"
             r"Consolidação[\s\xa0\n]+das[\s\xa0\n]+Leis[\s\xa0\n]+do[\s\xa0\n]+Trabalho|"
-            r"Lei(?:[\s\xa0\n]+Complementar)?(?:[\s\xa0\n]+n[º°\.]*)?[\s\xa0\n]*[\d\./]+))|"
-            r"\bartigo[\s\xa0\n]+correspondente[\s\xa0\n]+d[oa][\s\xa0\n]+Código[\s\xa0\n]+de[\s\xa0\n]+Processo[\s\xa0\n]+Civil\b",
+            r"Lei(?:[\s\xa0\n]+Complementar)?(?:[\s\xa0\n]+n[º°\.]*)?[\s\xa0\n]*[\d\./]+))",
             re.IGNORECASE | re.MULTILINE,
         ),
         CitationType.LEI,
