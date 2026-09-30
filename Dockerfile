@@ -10,5 +10,6 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+RUN chmod +x /app/run.sh
 
-ENTRYPOINT ["python", "src/cli/run_pipeline.py"]
+ENTRYPOINT ["/app/run.sh"]

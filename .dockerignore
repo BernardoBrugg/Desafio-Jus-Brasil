@@ -1,0 +1,13 @@
+.git
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+output
+submission.csv
+submission.zip
+matches
+.pytest_cache
+*.db
+dados

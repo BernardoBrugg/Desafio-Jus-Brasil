@@ -33,8 +33,11 @@ clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
 
+entrypoint:
+	bash run.sh ./dados/desafio1_bracis.db ./dados/txt ./submission.csv
+
 docker-build:
 	docker build -t caca-alucinacoes-bracis .
 
 docker-run:
-	docker run --rm -v $(PWD)/data/in:/data/in -v $(PWD)/data/out:/data/out caca-alucinacoes-bracis --input /data/in --output /data/out
+	docker run --rm -v $(PWD)/dados:/dados -v $(PWD)/output:/output caca-alucinacoes-bracis /dados/desafio1_bracis.db /dados/txt /output/submission.csv
